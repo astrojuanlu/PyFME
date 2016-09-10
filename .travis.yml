@@ -8,6 +8,8 @@ branches:
     - master
 
 before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y tree
   # http://conda.pydata.org/docs/travis.html
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
@@ -24,13 +26,16 @@ before_install:
 
 install:
   - pip install --no-deps .  # Test installation correctness
+  - tree
 
 script:
   - py.test -vv  # Test against installed code
+  - tree
 
 after_success:
   # Uninstall to test coverage against sources
   - pip uninstall pyfme -y
   - pip install --no-deps -e .
   - py.test --cov
+  - tree
   - codecov
